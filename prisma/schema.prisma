@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/**
+ * --- Enums ---
+ */
+enum Role {
+  INSTRUCTOR
+  STUDENT
+}
+
+enum LectureType {
+  READING
+  QUIZ
+}
+
+/**
+ * --- Models ---
+ */
+model User {
+  id           Int        @id @default(autoincrement())
+  email        String     @unique
+  passwordHash String
+  role         Role
+  courses      Course[]   @relation("InstructorCourses")
+  progress     Progress[]
+  createdAt    DateTime   @default(now())
+}
+
+model Course {
+  id           Int       @id @default(autoincrement())
+  title        String
+  description  String
+  instructor   User      @relation("InstructorCourses", fields: [instructorId], references: [id])
+  instructorId Int
+  lectures     Lecture[]
+  createdAt    DateTime  @default(now())
+}
+
+model Lecture {
+  id        Int         @id @default(autoincrement())
+  course    Course      @relation(fields: [courseId], references: [id])
+  courseId  Int
+  type      LectureType
+  title     String
+  content   String? // reading text or URL
+  order     Int
+  quiz      Quiz?
+  progress  Progress[]
+  createdAt DateTime    @default(now())
+
+  @@index([courseId, order])
+}
+
+model Quiz {
+  id        Int        @id @default(autoincrement())
+  lecture   Lecture    @relation(fields: [lectureId], references: [id])
+  lectureId Int        @unique
+  passPct   Int        @default(70)
+  questions Question[]
+}
+
+model Question {
+  id         Int    @id @default(autoincrement())
+  quiz       Quiz   @relation(fields: [quizId], references: [id])
+  quizId     Int
+  text       String
+  options    Json // store string[] as JSON in SQLite
+  correctIdx Int
+}
+
+model Progress {
+  id        Int     @id @default(autoincrement())
+  student   User    @relation(fields: [studentId], references: [id])
+  studentId Int
+  lecture   Lecture @relation(fields: [lectureId], references: [id])
+  lectureId Int
+  completed Boolean @default(false)
+  score     Int?
+
+  @@unique([studentId, lectureId])
+}
