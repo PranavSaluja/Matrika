@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { verifyToken } from "./jwt";
 
 export type AuthUser = {
-  id: string;
+  id: number;
   email: string;
   role: "INSTRUCTOR" | "STUDENT";
 };

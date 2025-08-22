@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type Role = "INSTRUCTOR" | "STUDENT";
-type LoginSuccess = { ok: true; id: string; role: Role };
+type LoginSuccess = { ok: true; id: number; role: Role }; // Changed id to number
 type LoginError = { error: string };
 type LoginResponse = LoginSuccess | LoginError;
 
@@ -17,6 +18,7 @@ function getErrorMessage(err: unknown): string {
 }
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState<string | null>(null);
@@ -26,6 +28,7 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setMsg(null);
+    
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
@@ -42,7 +45,16 @@ export default function LoginPage() {
       }
 
       if (isLoginSuccess(data)) {
-        setMsg(`Logged in as ${data.role}.`);
+        setMsg(`Welcome! Redirecting...`);
+        
+        // Redirect based on role after a brief delay
+        setTimeout(() => {
+          if (data.role === "INSTRUCTOR") {
+            router.push("/dashboard");
+          } else {
+            router.push("/courses");
+          }
+        }, 1500);
       } else {
         throw new Error("Unexpected response");
       }
@@ -79,10 +91,11 @@ export default function LoginPage() {
             <input
               className="w-full border-2 border-gray-200 rounded-full px-6 py-4 text-gray-700 placeholder-gray-400 focus:border-purple-500 focus:outline-none transition-colors"
               type="email"
-              placeholder="Username"
+              placeholder="Email Address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
           
@@ -94,6 +107,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={loading}
             />
             <div className="text-right mt-2">
               <a href="#" className="text-sm text-gray-600 hover:text-gray-800">Forget Password?</a>
@@ -101,27 +115,49 @@ export default function LoginPage() {
           </div>
 
           <button
-            className="w-full bg-orange-300 hover:bg-orange-400 text-gray-800 font-semibold py-4 rounded-full transition-colors disabled:opacity-50"
+            className="w-full bg-orange-300 hover:bg-orange-400 text-gray-800 font-semibold py-4 rounded-full transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={loading}
+            type="submit"
           >
-            {loading ? "Signing in..." : "Login"}
+            {loading ? (
+              <div className="flex items-center justify-center space-x-2">
+                <div className="w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full animate-spin"></div>
+                <span>Signing in...</span>
+              </div>
+            ) : (
+              "Login"
+            )}
           </button>
 
-          {msg && <p className="text-sm text-center text-red-600">{msg}</p>}
+          {msg && (
+            <div className={`text-sm text-center p-3 rounded-lg ${
+              msg.includes("Welcome") || msg.includes("Redirecting") 
+                ? "text-green-700 bg-green-50 border border-green-200" 
+                : "text-red-700 bg-red-50 border border-red-200"
+            }`}>
+              {msg}
+            </div>
+          )}
         </form>
 
         <p className="text-center text-gray-600 mt-6">
-          Dont have an account yet?{" "}
+        Don&#39;t have an account yet?
           <Link href="/register" className="text-purple-600 hover:text-purple-800 font-medium">
-            Register Now.
+            Register Now
           </Link>
         </p>
 
         <div className="flex space-x-4 mt-8">
-          <button className="flex-1 border-2 border-gray-200 rounded-full py-3 text-gray-700 hover:bg-gray-50 transition-colors">
+          <button 
+            className="flex-1 border-2 border-gray-200 rounded-full py-3 text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
+            disabled={loading}
+          >
             Google
           </button>
-          <button className="flex-1 border-2 border-gray-200 rounded-full py-3 text-gray-700 hover:bg-gray-50 transition-colors">
+          <button 
+            className="flex-1 border-2 border-gray-200 rounded-full py-3 text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-50"
+            disabled={loading}
+          >
             Github
           </button>
         </div>

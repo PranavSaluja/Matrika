@@ -2,7 +2,7 @@
 import * as jwt from "jsonwebtoken";
 
 export type JWTPayload = {
-  id: string;
+  id: number;
   email: string;
   role: "INSTRUCTOR" | "STUDENT";
 };
