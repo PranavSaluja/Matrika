@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Matrika – Online Learning Platform 🎓  
 
-## Getting Started
+> **A simplified online learning platform built as part of the Scalar Take-Home Assignment.**  
+> In ~36 hours, I designed and developed this MVP to demonstrate end-to-end product thinking, clean architecture, and functional implementation.  
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Overview  
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Matrika** allows two types of users — **Instructors** and **Students**.  
+- Instructors can create courses and lectures (reading or quiz).  
+- Students can browse courses, view lectures in order, attempt quizzes, and track their progress.  
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This project demonstrates:  
+- Authentication & role-based access  
+- RESTful APIs with clear separation of concerns  
+- Clean frontend with Next.js (App Router)  
+- Real-time grading logic for quizzes  
+- Student progress tracking  
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🏗️ Architecture  
 
-To learn more about Next.js, take a look at the following resources:
+![Architecture](./assets/architecture.png)  
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🗄️ Database Schema  
 
-## Deploy on Vercel
+![Schema](./assets/schema.png)  
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## ✨ Features  
+
+### 👨‍🏫 For Instructors  
+- Create courses with title + description  
+- Add lectures:  
+  - **Reading** → text or link  
+  - **Quiz** → MCQs with grading logic  
+
+### 👩‍🎓 For Students  
+- Browse available courses  
+- Sequential lecture completion flow  
+- Progress tracking → *“X / Y lectures completed”*  
+- Attempt quizzes → graded instantly, must pass (≥70%)  
+
+---
+
+## 🖼️ Glimpse of the App  
+
+### 🔑 Authentication  
+![Auth](./assets/auth.png)  
+
+### 📚 Course Browsing  
+![Courses](./assets/courses.png)  
+
+### 📝 Lecture View  
+![Lecture](./assets/lecture.png)  
+
+### 🧩 Quiz Attempt  
+![Quiz](./assets/quiz.png)  
+
+---
+
+## ⚙️ Tech Stack  
+
+- **Frontend:** Next.js (App Router) + TypeScript + Tailwind CSS  
+- **Backend:** Next.js API Routes (REST)  
+- **ORM & DB:** Prisma ORM + SQLite (local), PostgreSQL (production)  
+- **Auth:** JWT with HttpOnly cookies  
+- **Deployment:** Vercel (app) + Supabase/Neon (DB)  
+
+---
+
+## 📂 Project Structure  
+
