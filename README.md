@@ -22,7 +22,8 @@ This project demonstrates:
 
 ## 🏗️ Architecture  
 
-![Architecture](./assets/architecture.png)  
+<img width="1158" height="631" alt="Screenshot 2025-08-22 at 9 44 14 PM" src="https://github.com/user-attachments/assets/500b9b87-3b03-41a9-b2d1-7bb3160e3a53" />
+
 
 ---
 
