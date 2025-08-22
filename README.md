@@ -50,10 +50,19 @@ This project demonstrates:
 
 ---
 
-## 🖼️ Glimpse of the App  
+## 🖼️ Glimpse of the App 
+
+### Landing page
+
+<img width="1421" height="669" alt="Screenshot 2025-08-22 at 9 46 47 PM" src="https://github.com/user-attachments/assets/a1bd5cc2-ae98-4f8d-8e9e-0ebe80a6597a" />
+
 
 ### 🔑 Authentication  
-![Auth](./assets/auth.png)  
+
+<img width="1437" height="745" alt="Screenshot 2025-08-22 at 9 47 09 PM" src="https://github.com/user-attachments/assets/c703b70b-1905-4323-9fd6-dac738e7375f" />
+
+### Instructor Section
+
 
 ### 📚 Course Browsing  
 ![Courses](./assets/courses.png)  
