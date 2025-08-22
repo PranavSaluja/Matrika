@@ -29,7 +29,8 @@ This project demonstrates:
 
 ## 🗄️ Database Schema  
 
-![Schema](./assets/schema.png)  
+ <img width="1404" height="725" alt="Screenshot 2025-08-22 at 9 45 28 PM" src="https://github.com/user-attachments/assets/9a58ee9d-98ac-4e6e-a996-53c3cd39aff9" />
+
 
 ---
 
