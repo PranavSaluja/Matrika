@@ -1,4 +1,4 @@
-<img width="1014" height="673" alt="Screenshot 2025-08-22 at 9 55 49 PM" src="https://github.com/user-attachments/assets/9e038ebf-af7d-46c7-91db-2a6bb79f5e6b" /># Matrika – Online Learning Platform 🎓  
+# Matrika – Online Learning Platform 🎓  
 
 > **A simplified online learning platform built as part of the Scalar Take-Home Assignment.**  
 > In ~36 hours, I designed and developed this MVP to demonstrate end-to-end product thinking, clean architecture, and functional implementation.  
@@ -65,6 +65,7 @@ This project demonstrates:
 <img width="1267" height="462" alt="Screenshot 2025-08-22 at 9 53 50 PM" src="https://github.com/user-attachments/assets/e8752c20-b3a0-4ae3-9e2b-9fff9f81ab3a" />
 <img width="1008" height="707" alt="Screenshot 2025-08-22 at 9 54 10 PM" src="https://github.com/user-attachments/assets/f85ce1b9-d6d2-4923-a0e9-0c19960321f3" />
 <img width="1100" height="789" alt="Screenshot 2025-08-22 at 9 56 08 PM" src="https://github.com/user-attachments/assets/64f1a104-2561-4009-8de4-c6a397686dd8" />
+<img width="1014" height="673" alt="Screenshot 2025-08-22 at 9 55 49 PM" src="https://github.com/user-attachments/assets/9e038ebf-af7d-46c7-91db-2a6bb79f5e6b" />
 
 
 
