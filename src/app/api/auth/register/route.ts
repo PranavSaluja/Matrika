@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import { prisma } from "@/lib/prisma"; // if this alias fails, use: "../../../lib/prisma"
+import  prisma  from "@/lib/prisma"; // if this alias fails, use: "../../../lib/prisma"
 
 function bad(msg: string, status = 400) {
   return NextResponse.json({ error: msg }, { status });

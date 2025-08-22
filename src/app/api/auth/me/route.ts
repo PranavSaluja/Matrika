@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { verifyJwt } from "@/lib/jwt";
-import { prisma } from "@/lib/prisma";
+import { verifyToken } from "@/lib/jwt"; 
+import  prisma  from "@/lib/prisma";
 
 export async function GET() {
   // ⬇️ cookies() is async here
@@ -10,7 +10,7 @@ export async function GET() {
 
   if (!token) return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
 
-  const payload = verifyJwt(token);
+  const payload = verifyToken(token);
   if (!payload) return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
 
   const user = await prisma.user.findUnique({
