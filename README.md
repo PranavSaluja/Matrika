@@ -79,9 +79,8 @@ This project demonstrates:
 
 - **Frontend:** Next.js (App Router) + TypeScript + Tailwind CSS  
 - **Backend:** Next.js API Routes (REST)  
-- **ORM & DB:** Prisma ORM + SQLite (local), PostgreSQL (production)  
+- **ORM & DB:** Prisma ORM + SQLite (local)
 - **Auth:** JWT with HttpOnly cookies  
-- **Deployment:** Vercel (app) + Supabase/Neon (DB)  
 
 ---
 
