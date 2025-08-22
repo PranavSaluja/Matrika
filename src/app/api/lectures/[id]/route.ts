@@ -1,6 +1,21 @@
+// src/app/api/lectures/[id]/route.ts (update the GET method)
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getUser } from "@/lib/auth";
+
+interface LectureWithProgress {
+  id: number;
+  courseId: number;
+  type: string;
+  title: string;
+  content: string | null;
+  link: string | null;
+  order: number;
+  createdAt: Date;
+  progress: {
+    completed: boolean;
+  }[];
+}
 
 export async function GET(
   req: Request,
@@ -53,7 +68,7 @@ export async function GET(
 
     // For students, check if they can access this lecture (sequential access)
     if (user.role === "STUDENT") {
-      const previousLectures = await prisma.lecture.findMany({
+      const previousLectures: LectureWithProgress[] = await prisma.lecture.findMany({
         where: {
           courseId: lecture.course.id,
           order: { lt: lecture.order }
@@ -67,9 +82,7 @@ export async function GET(
       });
 
       // Check if all previous lectures are completed
-      const allPreviousCompleted = previousLectures.every((prevLecture: {
-        progress: { completed: boolean }[]
-      }) => 
+      const allPreviousCompleted = previousLectures.every((prevLecture: LectureWithProgress) => 
         prevLecture.progress.length > 0 && prevLecture.progress[0].completed
       );
 

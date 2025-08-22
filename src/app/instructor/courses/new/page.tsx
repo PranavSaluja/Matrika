@@ -1,28 +1,32 @@
+// src/app/instructor/courses/new/page.tsx (Corrected)
 "use client";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 type Role = "INSTRUCTOR" | "STUDENT";
-type Me = { id: string; role: Role; email?: string };
+// Changed id to number
+type Me = { id: number; role: Role; email?: string };
 type MeResponse = Me | { error: string };
 
 type CreateCourseSuccess = {
-  id: string;
+  id: number; // Changed to number
   title: string;
   description: string;
-  instructorId: string;
+  instructorId: number; // Changed to number
   createdAt: string;
 };
 type CreateCourseError = { error: string };
 type CreateCourseResponse = CreateCourseSuccess | CreateCourseError;
 
 function isMe(x: MeResponse): x is Me {
-  return typeof (x as Me)?.id === "string" && (x as Me)?.role !== undefined;
+  // This is the corrected line
+  return typeof (x as Me)?.id === "number" && (x as Me)?.role !== undefined;
 }
 
 function isCreateSuccess(x: CreateCourseResponse): x is CreateCourseSuccess {
-  return typeof (x as CreateCourseSuccess)?.id === "string";
+  // Also correct this one
+  return typeof (x as CreateCourseSuccess)?.id === "number";
 }
 
 function getErrorMessage(err: unknown): string {
@@ -227,8 +231,8 @@ export default function NewCoursePage() {
         </form>
 
         <div className="text-center mt-6">
-          <Link href="/" className="text-purple-600 hover:text-purple-800 font-medium text-sm">
-            ← Back to Home
+          <Link href="/dashboard" className="text-purple-600 hover:text-purple-800 font-medium text-sm">
+            ← Back to Dashboard
           </Link>
         </div>
       </div>

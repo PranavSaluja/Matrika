@@ -1,7 +1,9 @@
+// src/app/instructor/courses/[id]/page.tsx
+
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation"; // Import useParams
 
 type Lecture = {
   id: number;
@@ -18,8 +20,11 @@ type Course = {
   lectures: Lecture[];
 };
 
-export default function ManageCoursePage({ params }: { params: { id: string } }) {
+export default function ManageCoursePage() { // Remove params from props
   const router = useRouter();
+  const params = useParams(); // Use useParams hook
+  const courseId = params.id as string; // Assert type as string
+
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
@@ -29,42 +34,63 @@ export default function ManageCoursePage({ params }: { params: { id: string } })
     content: ""
   });
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`/api/courses/${params.id}`, { credentials: "include" })
+    // Only fetch if courseId is valid
+    if (!courseId) {
+      router.push("/dashboard");
+      return;
+    }
+
+    fetch(`/api/courses/${courseId}`, { credentials: "include" })
       .then(res => {
-        if (!res.ok) throw new Error("Failed to fetch course");
+        if (!res.ok) {
+          if (res.status === 404) throw new Error("Course not found.");
+          if (res.status === 401 || res.status === 403) throw new Error("Access denied.");
+          throw new Error("Failed to fetch course details.");
+        }
         return res.json();
       })
       .then(data => setCourse(data))
-      .catch(() => router.push("/dashboard"))
+      .catch(err => {
+        setError(err.message);
+        router.push("/dashboard");
+      })
       .finally(() => setLoading(false));
-  }, [params.id, router]);
+  }, [courseId, router]);
 
   const handleAddLecture = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+    setError(null);
 
     try {
-      const res = await fetch(`/api/courses/${params.id}/lectures`, {
+      const res = await fetch(`/api/courses/${courseId}/lectures`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify(formData)
       });
 
-      if (!res.ok) throw new Error("Failed to add lecture");
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Failed to add lecture.");
+      }
 
       const newLecture = await res.json();
-      setCourse(prev => prev ? {
-        ...prev,
-        lectures: [...prev.lectures, newLecture]
-      } : null);
+      setCourse(prev => {
+        if (!prev) return null;
+        return {
+          ...prev,
+          lectures: [...prev.lectures, newLecture].sort((a, b) => a.order - b.order)
+        };
+      });
 
       setFormData({ type: "READING", title: "", content: "" });
       setShowAddForm(false);
-    } catch (error) {
-      alert("Failed to add lecture");
+    } catch (err: unknown) {
+      setError(getErrorMessage(err));
     } finally {
       setSubmitting(false);
     }
@@ -75,13 +101,24 @@ export default function ManageCoursePage({ params }: { params: { id: string } })
       <div className="min-h-screen bg-gradient-to-br from-purple-50 to-orange-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading course...</p>
+          <p className="text-gray-600">Loading course management...</p>
         </div>
       </div>
     );
   }
 
-  if (!course) return null;
+  if (error || !course) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-orange-50 flex items-center justify-center">
+        <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+          <p className="text-red-600 mb-4">{error || "Course not found or access denied."}</p>
+          <Link href="/dashboard" className="px-4 py-2 bg-orange-300 rounded-full hover:bg-orange-400">
+            Back to Dashboard
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-orange-50">
@@ -173,6 +210,7 @@ export default function ManageCoursePage({ params }: { params: { id: string } })
                   Cancel
                 </button>
               </div>
+              {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
             </form>
           </div>
         )}
@@ -203,7 +241,8 @@ export default function ManageCoursePage({ params }: { params: { id: string } })
                     </div>
                     {lecture.type === "QUIZ" && (
                       <Link
-                        href={`/instructor/courses/${course.id}/lectures/${lecture.id}/quiz`}
+                        // This path will need to match the new dynamic segment name: [lectureId]
+                        href={`/instructor/courses/${courseId}/lectures/${lecture.id}/quiz`}
                         className="bg-purple-100 hover:bg-purple-200 text-purple-700 px-3 py-1 rounded-full text-sm font-medium transition-colors"
                       >
                         Manage Quiz
@@ -218,4 +257,10 @@ export default function ManageCoursePage({ params }: { params: { id: string } })
       </div>
     </div>
   );
+}
+
+// Helper to get error message (can be global)
+function getErrorMessage(err: unknown): string {
+  if (err instanceof Error) return err.message;
+  try { return JSON.stringify(err); } catch { return "Something went wrong"; }
 }
