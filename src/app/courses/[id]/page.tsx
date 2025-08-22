@@ -1,7 +1,9 @@
+// src/app/courses/[id]/page.tsx
+
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation"; // <--- Add useParams here
 
 type Progress = {
   completed: boolean;
@@ -24,22 +26,33 @@ type Course = {
   lectures: Lecture[];
 };
 
-export default function CourseDetailPage({ params }: { params: { id: string } }) {
+export default function CourseDetailPage() {
   const router = useRouter();
+  const params = useParams(); // Now useParams is recognized
+  const courseId = params.id as string;
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`/api/courses/${params.id}`, { credentials: "include" })
+    // Only fetch if courseId is valid
+    if (!courseId) {
+      router.push("/courses"); // Redirect if no course ID is provided
+      return;
+    }
+
+    fetch(`/api/courses/${courseId}`, { credentials: "include" })
       .then(res => {
-        if (!res.ok) throw new Error("Failed to fetch course");
+        if (!res.ok) {
+          if (res.status === 404) throw new Error("Course not found.");
+          throw new Error("Failed to fetch course details.");
+        }
         return res.json();
       })
       .then(data => setCourse(data))
       .catch(err => setError(err.message))
       .finally(() => setLoading(false));
-  }, [params.id]);
+  }, [courseId, router]); // Add router to dependency array as it's used inside useEffect
 
   if (loading) {
     return (
@@ -65,12 +78,12 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
     );
   }
 
-  const completedLectures = course.lectures.filter(lecture => 
+  const completedLectures = course.lectures.filter(lecture =>
     lecture.progress.length > 0 && lecture.progress[0].completed
   ).length;
 
-  const progressPercentage = course.lectures.length > 0 
-    ? Math.round((completedLectures / course.lectures.length) * 100) 
+  const progressPercentage = course.lectures.length > 0
+    ? Math.round((completedLectures / course.lectures.length) * 100)
     : 0;
 
   return (
@@ -100,7 +113,7 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
             <span>By {course.instructor.email.split('@')[0]}</span>
             <span>{course.lectures.length} lectures</span>
           </div>
-          
+
           {/* Progress Bar */}
           <div className="mb-4">
             <div className="flex justify-between text-sm text-gray-600 mb-2">
@@ -108,7 +121,7 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
               <span>{completedLectures}/{course.lectures.length} completed ({progressPercentage}%)</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-3">
-              <div 
+              <div
                 className="bg-gradient-to-r from-purple-500 to-orange-500 h-3 rounded-full transition-all duration-300"
                 style={{ width: `${progressPercentage}%` }}
               ></div>
@@ -119,21 +132,24 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
         {/* Lectures List */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Lectures</h2>
-          
+
           {course.lectures.length === 0 ? (
             <p className="text-gray-600 text-center py-8">No lectures available yet.</p>
           ) : (
             <div className="space-y-4">
               {course.lectures.map((lecture, index) => {
                 const isCompleted = lecture.progress.length > 0 && lecture.progress[0].completed;
-                const canAccess = index === 0 || course.lectures[index - 1].progress.length > 0 && course.lectures[index - 1].progress[0].completed;
-                
+                // Add explicit type to prevLecture
+                const canAccess = index === 0 || (
+                  index > 0 && course.lectures[index - 1].progress.length > 0 && course.lectures[index - 1].progress[0].completed
+                );
+
                 return (
-                  <div 
-                    key={lecture.id} 
+                  <div
+                    key={lecture.id}
                     className={`border rounded-lg p-4 transition-colors ${
-                      isCompleted ? 'bg-green-50 border-green-200' : 
-                      canAccess ? 'bg-white border-gray-200 hover:border-purple-300' : 
+                      isCompleted ? 'bg-green-50 border-green-200' :
+                      canAccess ? 'bg-white border-gray-200 hover:border-purple-300' :
                       'bg-gray-50 border-gray-200'
                     }`}
                   >
@@ -160,9 +176,9 @@ export default function CourseDetailPage({ params }: { params: { id: string } })
                           </div>
                         </div>
                       </div>
-                      
+
                       {canAccess ? (
-                        <Link 
+                        <Link
                           href={`/courses/${course.id}/lectures/${lecture.id}`}
                           className="bg-orange-300 hover:bg-orange-400 text-gray-800 px-4 py-2 rounded-full text-sm font-medium transition-colors"
                         >
