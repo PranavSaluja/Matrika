@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import { prisma } from "@/lib/prisma";
-import { signJwt } from "@/lib/jwt";
+import  prisma  from "@/lib/prisma";
+import { signToken } from "@/lib/jwt";
 
 function bad(msg: string, status = 400) {
   return NextResponse.json({ error: msg }, { status });
@@ -23,7 +23,8 @@ export async function POST(req: Request) {
     if (!ok) return bad("Invalid credentials", 401);
 
     // issue JWT
-    const token = signJwt({ id: user.id, role: user.role as "INSTRUCTOR" | "STUDENT" });
+    const token = signToken({ id: user.id, email: user.email, role: user.role as "INSTRUCTOR" | "STUDENT" });
+
 
     // create response + set HttpOnly cookie
     const res = NextResponse.json({ ok: true, id: user.id, role: user.role });

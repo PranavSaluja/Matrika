@@ -1,23 +1,22 @@
-import * as jwt from "jsonwebtoken"; // <-- key change
+// lib/jwt.ts
+import * as jwt from "jsonwebtoken";
 
-const SECRET: jwt.Secret = process.env.JWT_SECRET as jwt.Secret;
-if (!SECRET) {
-  throw new Error("JWT_SECRET missing. Add it to your .env");
+export type JWTPayload = {
+  id: string;
+  email: string;
+  role: "INSTRUCTOR" | "STUDENT";
+};
+
+const JWT_SECRET: jwt.Secret = process.env.JWT_SECRET || "dev_secret_change_me";
+
+export function signToken(
+  payload: JWTPayload,
+  options?: jwt.SignOptions
+): string {
+  // Default 7d expiry; allow override via options
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d", ...options });
 }
 
-export type JWTPayload = { id: number; role: "INSTRUCTOR" | "STUDENT" };
-
-/** 7 days in seconds */
-const WEEK = 60 * 60 * 24 * 7;
-
-export function signJwt(payload: JWTPayload, expiresInSec: number = WEEK) {
-  return jwt.sign(payload, SECRET, { expiresIn: expiresInSec });
-}
-
-export function verifyJwt(token: string): JWTPayload | null {
-  try {
-    return jwt.verify(token, SECRET) as JWTPayload;
-  } catch {
-    return null;
-  }
+export function verifyToken(token: string): JWTPayload {
+  return jwt.verify(token, JWT_SECRET) as JWTPayload;
 }
