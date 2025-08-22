@@ -1,13 +1,26 @@
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-export const metadata = { title: "Matrika" };
+const inter = Inter({ subsets: ["latin"] });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const metadata: Metadata = {
+  title: "Matrika",
+  description: "Your Online Learning Platform",
+  // Add these lines for favicon
+  icons: {
+    icon: '/logo.png', // This is the path relative to the public directory
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-gray-50 text-gray-900 ">
-        <div className="">{children}</div>
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

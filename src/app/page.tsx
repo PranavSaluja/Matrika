@@ -10,7 +10,7 @@ export default function Home() {
       
       {/* Header */}
       <header className="flex justify-between items-center p-6 relative z-10">
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-3">
           <Image 
             src="/logo.png" 
             alt="Matrika Logo" 
@@ -18,7 +18,7 @@ export default function Home() {
             height={65}
             className="rounded-lg"
           />
-          <span className="text-xl font-semibold text-gray-800">Matrika</span>
+          <span className="text-2xl font-semibold text-gray-800">Matrika</span>
         </div>
         
         <nav className="hidden md:flex space-x-8">
@@ -57,8 +57,15 @@ export default function Home() {
         
         <div className="flex-1 flex justify-center">
           <div className="relative">
-            <div className="w-96 h-96 bg-gradient-to-br from-purple-200 to-orange-200 rounded-full flex items-center justify-center">
-              <div className="text-8xl">👩‍🎓</div>
+            <div className="w-96 h-96 bg-gradient-to-br from-purple-200 to-orange-200 rounded-full flex items-center justify-center overflow-hidden">
+              <Image 
+                src="/girlModel.png" 
+                alt="Student with graduation cap" 
+                width={500}
+                height={1000}
+                className="object-contain"
+                priority
+              />
             </div>
           </div>
         </div>
