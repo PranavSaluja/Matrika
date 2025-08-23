@@ -51,6 +51,7 @@ model Lecture {
   title     String
   content   String? // reading text or URL
   order     Int
+  link      String?
   quiz      Quiz?
   progress  Progress[]
   createdAt DateTime    @default(now())

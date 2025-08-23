@@ -1,14 +1,16 @@
+// src/app/api/courses/[id]/route.ts
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getUser } from "@/lib/auth";
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> } // Changed this line
 ) {
   try {
     const user = await getUser();
-    const courseId = parseInt(params.id);
+    const resolvedParams = await params; // Added this line
+    const courseId = parseInt(resolvedParams.id); // Changed this line
 
     if (isNaN(courseId)) {
       return NextResponse.json({ error: "Invalid course ID" }, { status: 400 });
