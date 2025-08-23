@@ -22,6 +22,10 @@ This project demonstrates:
 
 ## 🏗️ Architecture  
 
+LLD (UML Class Diagram of my app)
+<img width="3840" height="1405" alt="Untitled diagram _ Mermaid Chart-2025-08-23-132045" src="https://github.com/user-attachments/assets/408f2881-6dd4-44aa-98e6-c72db9411151" />
+
+
 <img width="1158" height="631" alt="Screenshot 2025-08-22 at 9 44 14 PM" src="https://github.com/user-attachments/assets/500b9b87-3b03-41a9-b2d1-7bb3160e3a53" />
 
 
