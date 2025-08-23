@@ -60,11 +60,13 @@ export default function ManageCoursePage() { // Remove params from props
       .finally(() => setLoading(false));
   }, [courseId, router]);
 
-  const handleAddLecture = async (e: React.FormEvent) => {
+ 
+
+const handleAddLecture = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     setError(null);
-
+  
     try {
       const res = await fetch(`/api/courses/${courseId}/lectures`, {
         method: "POST",
@@ -72,12 +74,12 @@ export default function ManageCoursePage() { // Remove params from props
         credentials: "include",
         body: JSON.stringify(formData)
       });
-
+  
       if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.error || "Failed to add lecture.");
       }
-
+  
       const newLecture = await res.json();
       setCourse(prev => {
         if (!prev) return null;
@@ -86,9 +88,14 @@ export default function ManageCoursePage() { // Remove params from props
           lectures: [...prev.lectures, newLecture].sort((a, b) => a.order - b.order)
         };
       });
-
+  
       setFormData({ type: "READING", title: "", content: "" });
       setShowAddForm(false);
+  
+      // If it's a quiz, show a message about adding questions
+      if (formData.type === "QUIZ") {
+        alert("Quiz lecture created! Click 'Manage Quiz' to add questions.");
+      }
     } catch (err: unknown) {
       setError(getErrorMessage(err));
     } finally {
@@ -183,16 +190,16 @@ export default function ManageCoursePage() { // Remove params from props
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Content {formData.type === "READING" ? "(Text or URL)" : "(Instructions)"}
-                </label>
-                <textarea
-                  value={formData.content}
-                  onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
-                  className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 focus:border-purple-500 focus:outline-none min-h-[100px]"
-                  placeholder={formData.type === "READING" ? "Enter reading content or paste a URL..." : "Enter quiz instructions..."}
-                />
-              </div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    {formData.type === "READING" ? "Content (Text or URL)" : "Description (Optional)"}
+  </label>
+  <textarea
+    value={formData.content}
+    onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
+    className="w-full border-2 border-gray-200 rounded-lg px-3 py-2 focus:border-purple-500 focus:outline-none min-h-[100px]"
+    placeholder={formData.type === "READING" ? "Enter reading content or paste a URL..." : "Enter quiz description (optional)..."}
+  />
+</div>
 
               <div className="flex space-x-3">
                 <button
