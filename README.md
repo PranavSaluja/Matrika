@@ -81,8 +81,9 @@ LLD (UML Class Diagram of my app)
 <img width="1366" height="721" alt="Screenshot 2025-08-22 at 9 59 16 PM" src="https://github.com/user-attachments/assets/deb64a0f-474a-4ca3-abd6-ae6d0024fa1d" />
 
 
-### 🧩 Quiz Attempt  
-![Quiz](./assets/quiz.png)  
+### 🧩 Quiz and lecture reading page (Learning page)
+<img width="1000" height="649" alt="Screenshot 2025-08-24 at 8 59 57 AM" src="https://github.com/user-attachments/assets/7026e2f6-4620-4b29-9702-27ecdb16b086" />
+
 
 ---
 
