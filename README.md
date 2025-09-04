@@ -155,7 +155,7 @@ npx prisma migrate dev
 5) npm run dev
 
 
-## High level design for the application
+
 
 
 
