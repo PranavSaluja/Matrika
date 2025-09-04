@@ -22,6 +22,17 @@ This project demonstrates:
 
 ## 🏗️ Architecture  
 
+HLD ( High level design ) 
+
+<img width="1607" height="479" alt="Screenshot 2025-09-04 at 10 54 15 AM" src="https://github.com/user-attachments/assets/54a18de8-140f-49c1-934c-a20e2d3bc8ec" />
+<img width="1210" height="849" alt="Screenshot 2025-09-04 at 10 54 49 AM" src="https://github.com/user-attachments/assets/bedc4672-4e03-46ac-9919-1c57ae62967f" />
+
+## Instructor 
+<img width="1327" height="793" alt="Screenshot 2025-09-04 at 10 55 35 AM" src="https://github.com/user-attachments/assets/b313b3dd-5f81-4d95-aa4a-7766f2e1494c" />
+
+## Student
+<img width="1551" height="813" alt="Screenshot 2025-09-04 at 10 56 09 AM" src="https://github.com/user-attachments/assets/1381bf12-9e30-4d42-8cee-11cf81c3cf60" />
+
 LLD (UML Class Diagram of my app)
 <img width="3840" height="1405" alt="Untitled diagram _ Mermaid Chart-2025-08-23-132045" src="https://github.com/user-attachments/assets/408f2881-6dd4-44aa-98e6-c72db9411151" />
 
@@ -144,5 +155,15 @@ JWT_SECRET="yoursecret"
 npx prisma migrate dev
 
 5) npm run dev
+
+
+## High level design for the application
+
+
+
+
+
+
+
 
 
